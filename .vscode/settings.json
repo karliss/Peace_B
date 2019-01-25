@@ -4,5 +4,8 @@
 		"export/**/*.hx": true
 	},
 	"lime.defaultBuildConfiguration": "Debug",
-	"lime.defaultTarget": "HTML5"
+	"lime.defaultTarget": "HTML5",
+	"[haxe]": {
+		"editor.formatOnSave": true
+	}
 }
