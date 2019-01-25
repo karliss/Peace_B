@@ -36,11 +36,14 @@ class PlayState extends FlxState {
 		// Add static images
 		add(level.imagesLayer);
 
-		// Load player objects
-		add(level.objectsLayer);
-
 		// Add foreground tiles after adding level objects, so these tiles render on top of player
 		add(level.foregroundTiles);
+
+		// Add floor layer
+		add(level.floorLayer);
+
+		// Load player objects
+		add(level.objectsLayer);
 
 		// Create UI
 		score = new FlxText(2, 2, 80);
@@ -76,19 +79,17 @@ class PlayState extends FlxState {
 			trace("foo down");
 			player.acceleration.y += player.maxVelocity.y * 4;
 		}
+
 		super.update(elapsed);
 
+		// Add foreground tiles after adding level objects, so these tiles render on top of player
+		add(level.foregroundTiles);
 		FlxG.overlap(coins, player, getCoin);
 
 		// Collide with foreground tile layer
 		level.collideWithLevel(player);
 
-		FlxG.overlap(exit, player, win);
-
-		if (FlxG.overlap(player, floor)) {
-			youDied = true;
-			FlxG.resetState();
-		}
+		// FlxG.overlap(exit, player, win);
 	}
 
 	public function win(Exit:FlxObject, Player:FlxObject):Void {

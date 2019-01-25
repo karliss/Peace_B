@@ -8,32 +8,32 @@
  </tile>
  <tile id="1" type="box">
   <properties>
-   <property name="ground_level" type="bool" value="false"/>
+   <property name="ground_layer" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="2" type="wall">
   <properties>
-   <property name="ground_level" type="bool" value="false"/>
+   <property name="ground_layer" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="3" type="floor">
   <properties>
-   <property name="ground_level" type="bool" value="true"/>
+   <property name="ground_layer" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="4" type="carpet">
   <properties>
-   <property name="ground_level" type="bool" value="true"/>
+   <property name="ground_layer" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="5" type="main_carpet">
   <properties>
-   <property name="ground_level" type="bool" value="true"/>
+   <property name="ground_layer" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="6" type="special_carpet">
   <properties>
-   <property name="ground_level" type="bool" value="true"/>
+   <property name="ground_layer" type="bool" value="true"/>
   </properties>
  </tile>
 </tileset>
