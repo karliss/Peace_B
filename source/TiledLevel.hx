@@ -27,9 +27,10 @@ class TiledLevel extends TiledMap {
 	inline static var c_PATH_LEVEL_TILESHEETS = "assets/tiled/";
 
 	// Array of tilemaps used for collision
-	public var foregroundTiles:FlxGroup;
+	public var wallLayer:FlxGroup;
 	public var objectsLayer:FlxGroup;
-	public var floorLayer:FlxGroup;
+	public var carpetLayer:FlxGroup;
+	public var foldedCarpetLayer:FlxGroup;
 	public var backgroundLayer:FlxGroup;
 
 	var collidableTileLayers:Array<FlxTilemap>;
@@ -50,10 +51,11 @@ class TiledLevel extends TiledMap {
 		super(tiledLevel);
 
 		imagesLayer = new FlxGroup();
-		foregroundTiles = new FlxGroup();
+		wallLayer = new FlxGroup();
 		objectsLayer = new FlxGroup();
 		backgroundLayer = new FlxGroup();
-		floorLayer = new FlxGroup();
+		carpetLayer = new FlxGroup();
+		foldedCarpetLayer = new FlxGroup();
 
 		FlxG.camera.setScrollBoundsRect(0, 0, fullWidth, fullHeight, true);
 
@@ -123,13 +125,15 @@ class TiledLevel extends TiledMap {
 
 			if (tileLayer.properties.contains("nocollide") || tileLayer.name == "background") {
 				backgroundLayer.add(tilemap);
-			} else if (tileLayer.name == "floor") {
-				floorLayer.add(tilemap);
-			} else {
+			} else if (tileLayer.name == "carpet") {
+				carpetLayer.add(tilemap);
+			} else if (tileLayer.name == "folded_carpet") {
+				foldedCarpetLayer.add(tilemap);
+			} else if (tileLayer.name == "wall") {
 				if (collidableTileLayers == null)
 					collidableTileLayers = new Array<FlxTilemap>();
 
-				foregroundTiles.add(tilemap);
+				wallLayer.add(tilemap);
 				collidableTileLayers.push(tilemap);
 			}
 		}

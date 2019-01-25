@@ -27,7 +27,6 @@ class PlayState extends FlxState {
 		coins = new FlxGroup();
 		level = new TiledLevel("assets/tiled/test_map.tmx", this);
 
-		// Add backgrounds
 		add(level.backgroundLayer);
 
 		// Draw coins first
@@ -36,11 +35,9 @@ class PlayState extends FlxState {
 		// Add static images
 		add(level.imagesLayer);
 
-		// Add foreground tiles after adding level objects, so these tiles render on top of player
-		add(level.foregroundTiles);
-
-		// Add floor layer
-		add(level.floorLayer);
+		add(level.wallLayer);
+		add(level.carpetLayer);
+		add(level.foldedCarpetLayer);
 
 		// Load player objects
 		add(level.objectsLayer);
@@ -83,7 +80,7 @@ class PlayState extends FlxState {
 		super.update(elapsed);
 
 		// Add foreground tiles after adding level objects, so these tiles render on top of player
-		add(level.foregroundTiles);
+		add(level.wallLayer);
 		FlxG.overlap(coins, player, getCoin);
 
 		// Collide with foreground tile layer
