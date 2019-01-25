@@ -25,7 +25,7 @@ class PlayState extends FlxState {
 
 		// Load the level's tilemaps
 		coins = new FlxGroup();
-		level = new TiledLevel("assets/tiled/level.tmx", this);
+		level = new TiledLevel("assets/tiled/test_map.tmx", this);
 
 		// Add backgrounds
 		add(level.backgroundLayer);

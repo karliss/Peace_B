@@ -314,7 +314,7 @@
 </data>
  </layer>
  <objectgroup id="6" name="marker">
-  <object id="2" name="player" x="1818.18" y="1572.73" width="32" height="32"/>
+  <object id="2" name="player" type="player" x="1818.18" y="1572.73" width="32" height="32"/>
   <object id="3" name="enemy" x="2151.52" y="1181.82" width="32" height="32"/>
  </objectgroup>
 </map>

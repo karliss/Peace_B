@@ -29,12 +29,22 @@ class TiledLevel extends TiledMap {
 	// Array of tilemaps used for collision
 	public var foregroundTiles:FlxGroup;
 	public var objectsLayer:FlxGroup;
+	public var floorLayer:FlxGroup;
 	public var backgroundLayer:FlxGroup;
 
 	var collidableTileLayers:Array<FlxTilemap>;
 
 	// Sprites of images layers
 	public var imagesLayer:FlxGroup;
+
+	public function getLayerTileset(ly:TiledTileLayer):TiledTileSet {
+		for (tile in ly.tileArray) {
+			if (tile > 0) {
+				return getGidOwner(tile);
+			}
+		}
+		return null;
+	}
 
 	public function new(tiledLevel:FlxTiledMapAsset, state:PlayState) {
 		super(tiledLevel);
@@ -43,11 +53,35 @@ class TiledLevel extends TiledMap {
 		foregroundTiles = new FlxGroup();
 		objectsLayer = new FlxGroup();
 		backgroundLayer = new FlxGroup();
+		floorLayer = new FlxGroup();
 
 		FlxG.camera.setScrollBoundsRect(0, 0, fullWidth, fullHeight, true);
 
 		loadImages();
 		loadObjects(state);
+
+		for (tileset in tilesets) {
+			for (i in tileset.firstGID...(tileset.firstGID + tileset.numTiles)) {
+				/*gidType[i] = MapType.Empty;
+					var props:TiledPropertySet = tileset.getPropertiesByGid(i);
+					if (props == null)
+						continue;
+					var type = props.get("type");
+					if (type != null) {
+						if (type == "water") {
+							gidType[i] = MapType.Water;
+						} else if (type == "block") {
+							gidType[i] = MapType.Block;
+						} else if (type == "object") {
+							gidType[i] = MapType.Object;
+							var tileId2 = tileset.fromGid(i);
+							var objectType = props.get("objectType");
+							objectGidMap.set(tileId2, objectType);
+							objectStringMap.set(objectType, tileId2);
+						}
+				}*/
+			}
+		}
 
 		// Load Tile Maps
 		for (layer in layers) {
@@ -55,24 +89,16 @@ class TiledLevel extends TiledMap {
 				continue;
 			var tileLayer:TiledTileLayer = cast layer;
 
-			var tileSheetName:String = tileLayer.properties.get("tileset");
+			var tileSet:TiledTileSet = getLayerTileset(tileLayer);
 
-			if (tileSheetName == null)
-				throw "'tileset' property not defined for the '" + tileLayer.name + "' layer. Please add the property to the layer.";
-
-			var tileSet:TiledTileSet = null;
-			for (ts in tilesets) {
-				if (ts.name == tileSheetName) {
-					tileSet = ts;
-					break;
-				}
-			}
-
-			if (tileSet == null)
-				throw "Tileset '" + tileSheetName + " not found. Did you misspell the 'tilesheet' property in " + tileLayer.name + "' layer?";
-
+			// if (tileSet == null)
+			//	throw "Tileset '" + tileSheetName + " not found. Did you misspell the 'tilesheet' property in " + tileLayer.name + "' layer?";
+			trace(tileSet);
+			trace(tileSet.imageSource);
 			var imagePath = new Path(tileSet.imageSource);
-			var processedPath = c_PATH_LEVEL_TILESHEETS + imagePath.file + "." + imagePath.ext;
+			var processedPath = Path.join([c_PATH_LEVEL_TILESHEETS, tileSet.imageSource]);
+			// var processedPath = new Path(c_PATH_LEVEL_TILESHEETS) +
+			// var processedPath = c_PATH_LEVEL_TILESHEETS + imagePath.file + "." + imagePath.ext;
 
 			// could be a regular FlxTilemap if there are no animated tiles
 			var tilemap = new FlxTilemapExt();
@@ -95,8 +121,10 @@ class TiledLevel extends TiledMap {
 							null]);
 			}
 
-			if (tileLayer.properties.contains("nocollide")) {
+			if (tileLayer.properties.contains("nocollide") || tileLayer.name == "background") {
 				backgroundLayer.add(tilemap);
+			} else if (tileLayer.name == "floor") {
+				floorLayer.add(tilemap);
 			} else {
 				if (collidableTileLayers == null)
 					collidableTileLayers = new Array<FlxTilemap>();
@@ -122,14 +150,14 @@ class TiledLevel extends TiledMap {
 			var objectLayer:TiledObjectLayer = cast layer;
 
 			// collection of images layer
-			if (layer.name == "images") {
+			/*if (layer.name == "images") {
 				for (o in objectLayer.objects) {
 					loadImageObject(o);
 				}
-			}
+			}*/
 
 			// objects layer
-			if (layer.name == "objects") {
+			if (layer.name == "marker") {
 				for (o in objectLayer.objects) {
 					loadObject(state, o, objectLayer, objectsLayer);
 				}
@@ -180,7 +208,7 @@ class TiledLevel extends TiledMap {
 			y -= g.map.getGidOwner(o.gid).tileHeight;
 
 		switch (o.type.toLowerCase()) {
-			case "player_start":
+			case "player":
 				var player = new FlxSprite(x, y);
 				player.makeGraphic(32, 32, 0xffaa1111);
 				player.maxVelocity.x = 160;
@@ -191,23 +219,34 @@ class TiledLevel extends TiledMap {
 				FlxG.camera.follow(player);
 				state.player = player;
 				group.add(player);
+				/*case "player_start":
+						var player = new FlxSprite(x, y);
+						player.makeGraphic(32, 32, 0xffaa1111);
+						player.maxVelocity.x = 160;
+						player.maxVelocity.y = 160;
+						// player.acceleration.y = 400;
+						player.drag.x = player.maxVelocity.x * 4;
+						player.drag.y = player.maxVelocity.y * 4;
+						FlxG.camera.follow(player);
+						state.player = player;
+						group.add(player);
 
-			case "floor":
-				var floor = new FlxObject(x, y, o.width, o.height);
-				state.floor = floor;
+					case "floor":
+						var floor = new FlxObject(x, y, o.width, o.height);
+						state.floor = floor;
 
-			case "coin":
-				var tileset = g.map.getGidOwner(o.gid);
-				var coin = new FlxSprite(x, y, c_PATH_LEVEL_TILESHEETS + tileset.imageSource);
-				state.coins.add(coin);
+					case "coin":
+						var tileset = g.map.getGidOwner(o.gid);
+						var coin = new FlxSprite(x, y, c_PATH_LEVEL_TILESHEETS + tileset.imageSource);
+						state.coins.add(coin);
 
-			case "exit":
-				// Create the level exit
-				var exit = new FlxSprite(x, y);
-				exit.makeGraphic(32, 32, 0xff3f3f3f);
-				exit.exists = false;
-				state.exit = exit;
-				group.add(exit);
+					case "exit":
+						// Create the level exit
+						var exit = new FlxSprite(x, y);
+						exit.makeGraphic(32, 32, 0xff3f3f3f);
+						exit.exists = false;
+						state.exit = exit;
+						group.add(exit); */
 		}
 	}
 
