@@ -5,7 +5,9 @@
 	},
 	"lime.defaultBuildConfiguration": "Debug",
 	"lime.defaultTarget": "HTML5",
+	"lime.projectFile": "Project.xml",
 	"[haxe]": {
-		"editor.formatOnSave": true
+		"editor.formatOnSave": true,
+		"editor.insertSpaces": false,
 	}
 }

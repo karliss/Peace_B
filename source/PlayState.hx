@@ -15,6 +15,7 @@ class PlayState extends FlxState {
 	public var player:FlxSprite;
 	public var floor:FlxObject;
 	public var exit:FlxSprite;
+	public var input:Input = new Input();
 
 	static var youDied:Bool = false;
 
@@ -27,6 +28,7 @@ class PlayState extends FlxState {
 		coins = new FlxGroup();
 		level = new TiledLevel("assets/tiled/test_map.tmx", this);
 
+		// Add backgrounds
 		add(level.backgroundLayer);
 
 		// Draw coins first
@@ -35,9 +37,9 @@ class PlayState extends FlxState {
 		// Add static images
 		add(level.imagesLayer);
 
-		add(level.wallLayer);
 		add(level.carpetLayer);
 		add(level.foldedCarpetLayer);
+		add(level.wallLayer);
 
 		// Load player objects
 		add(level.objectsLayer);
@@ -60,27 +62,25 @@ class PlayState extends FlxState {
 	}
 
 	override public function update(elapsed:Float):Void {
+		input.update();
+
 		player.acceleration.x = 0;
 		player.acceleration.y = 0;
-		if (FlxG.keys.anyPressed([LEFT, A])) {
+		if (input.directionLeft) {
 			player.acceleration.x -= player.maxVelocity.x * 4;
 		}
-		if (FlxG.keys.anyPressed([RIGHT, D])) {
+		if (input.directionRight) {
 			player.acceleration.x += player.maxVelocity.x * 4;
 		}
-		if (FlxG.keys.anyPressed([UP, W])) {
-			trace("foo up");
+		if (input.directionUp) {
 			player.acceleration.y -= player.maxVelocity.y * 4;
 		}
-		if (FlxG.keys.anyPressed([DOWN, S])) {
-			trace("foo down");
+		if (input.directionDown) {
 			player.acceleration.y += player.maxVelocity.y * 4;
 		}
 
 		super.update(elapsed);
 
-		// Add foreground tiles after adding level objects, so these tiles render on top of player
-		add(level.wallLayer);
 		FlxG.overlap(coins, player, getCoin);
 
 		// Collide with foreground tile layer
