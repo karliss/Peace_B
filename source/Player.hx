@@ -40,7 +40,7 @@ class Player extends AnimatedSprite {
 
 	function updateCarriedBlock() {
 		if (object != null) {
-			var gid = object.idOnPickup;
+			var gid = object.idUnfolded;
 			trace(object);
 			var frame = gid - tileset.getGidOwner(gid).firstGID;
 			blockSprite.animation.frameIndex = frame;
