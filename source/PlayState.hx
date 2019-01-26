@@ -107,21 +107,26 @@ class PlayState extends FlxState {
 		return false;
 	}
 
-	private function enemyOnMainCarpetCallback(a:FlxObject, b:FlxObject):Bool {
+	private function enemyOnCarpetCallback(a:FlxObject, b:FlxObject):Bool {
+		var makeSlow:Bool = false;
+		var id = level.carpetTiles.getTileIndexByCoords(a.getMidpoint());
+		var props:TiledLevel.PickableProperties = level.idToPropertiesMap.get(level.carpetTiles.getTileByIndex(id));
+		if (props.carpetType == "NORMAL") {
+			makeSlow = true;
+		}
+
 		var found:Bool = false;
 		for (e in enemies) {
-			if (e.overlapsPoint(b.getMidpoint()) && e.isFleeting == false) {
-				found = true;
-				break;
+			if (e.overlapsPoint(b.getMidpoint())) {
+				if (e.isFleeting == false)
+					found = true;
+				if (makeSlow) {
+					e.slow = true;
+				}
 			}
 		}
 
-		if (found == false)
-			return false;
-
-		var id = level.carpetTiles.getTileIndexByCoords(a.getMidpoint());
-		var props:TiledLevel.PickableProperties = level.idToPropertiesMap.get(level.carpetTiles.getTileByIndex(id));
-		if (props.carpetType == "MAIN") {
+		if (found && props.carpetType == "MAIN") {
 			level.carpetTiles.setTileByIndex(id, 0);
 		}
 
@@ -166,9 +171,10 @@ class PlayState extends FlxState {
 			level.wallTiles.overlapsWithCallback(enemy, enemyCollisionCallback);
 		}
 
-		// destroy main carpets
+		// handle carpets: destroy main carpets, get slow on normal carpets
 		for (enemy in enemies) {
-			level.carpetTiles.overlapsWithCallback(enemy, enemyOnMainCarpetCallback);
+			enemy.slow = false;
+			level.carpetTiles.overlapsWithCallback(enemy, enemyOnCarpetCallback);
 		}
 
 		for (enemy in enemies) {

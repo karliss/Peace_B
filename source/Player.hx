@@ -15,6 +15,7 @@ class Player extends AnimatedSprite {
 	public var lastMoveDir:Direction = Direction.Right;
 	public var currentDir:Direction = Direction.Here;
 	public var object:TiledLevel.PickableProperties;
+	public var slow:Bool = false;
 
 	var container:FlxGroup;
 	var blockSprite:FlxSprite;
@@ -168,13 +169,13 @@ class Player extends AnimatedSprite {
 		}
 		switch (d) {
 			case Left:
-				moveDirection.x -= maxVelocity.x;
+				moveDirection.x -= (slow ? maxVelocity.x / 2 : maxVelocity.x);
 			case Up:
-				moveDirection.y -= maxVelocity.y;
+				moveDirection.y -= (slow ? maxVelocity.y / 2 : maxVelocity.y);
 			case Right:
-				moveDirection.x += maxVelocity.x;
+				moveDirection.x += (slow ? maxVelocity.x / 2 : maxVelocity.x);
 			case Down:
-				moveDirection.y += maxVelocity.y;
+				moveDirection.y += (slow ? maxVelocity.y / 2 : maxVelocity.y);
 			case Here:
 		}
 	}
