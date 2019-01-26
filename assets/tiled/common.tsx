@@ -34,6 +34,7 @@
    <property name="folded_carpet" value="special_carpet_folded"/>
   </properties>
  </tile>
+ <tile id="7" type="grass"/>
  <tile id="8" type="grass"/>
  <tile id="12" type="carpet_folded">
   <properties>
