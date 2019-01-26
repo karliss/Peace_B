@@ -11,8 +11,13 @@
         },
         "idle" : {
             "speed" : 2,
-            "looped" : "true",
-            "f" : [0, 21]
+            "looped" : "false",
+            "f" : [0, 21, 0, 21, 0, 21, 0]
+        },
+        "idle2" : {
+            "speed" : 2,
+            "looped" : "false",
+            "f" : [0, 0, 22]
         }
     }
 }
