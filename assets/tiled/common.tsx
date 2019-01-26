@@ -17,18 +17,21 @@
   <properties>
    <property name="carpet" type="bool" value="true"/>
    <property name="carpet_type" value="NORMAL"/>
+   <property name="folded_carpet" value="carpet_folded"/>
   </properties>
  </tile>
  <tile id="5" type="main_carpet">
   <properties>
    <property name="carpet" type="bool" value="true"/>
    <property name="carpet_type" value="MAIN"/>
+   <property name="folded_carpet" value="main_carpet_folded"/>
   </properties>
  </tile>
  <tile id="6" type="special_carpet">
   <properties>
    <property name="carpet" type="bool" value="true"/>
    <property name="carpet_type" value="SPECIAL"/>
+   <property name="folded_carpet" value="special_carpet_folded"/>
   </properties>
  </tile>
  <tile id="12" type="carpet_folded">
