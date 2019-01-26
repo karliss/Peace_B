@@ -8,14 +8,6 @@ import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.math.FlxPoint;
 
-enum PickedObject {
-	NONE;
-	CARPET;
-	MAIN_CARPET;
-	SPECIAL_CARPET;
-	WALL;
-}
-
 class PlayState extends FlxState {
 	public var level:TiledLevel;
 	public var score:FlxText;
@@ -109,56 +101,38 @@ class PlayState extends FlxState {
 		// FlxG.overlap(exit, player, win);
 	}
 
-	public function pickup(x:Int, y:Int):PickedObject {
+	public function pickup(x:Int, y:Int):TiledLevel.PickableProperties {
 		trace("doing pickup");
 		var p = player.getMidpoint();
-		var pickedObject:PickedObject = null;
-		if (level.wallTiles.getTile(x, y) == level.nameToIdMap.get("wall")) {
-			trace("Picked wall");
+		var pickedObject:TiledLevel.PickableProperties = null;
+		if (level.wallTiles.getTile(x, y) != 0) {
+			trace("picked wall");
+			pickedObject = level.idToPropertiesMap.get(level.wallTiles.getTile(x, y));
 			level.wallTiles.setTile(x, y, 0);
-			pickedObject = WALL;
-		}
-		// Player wants to pick carpet
-		else if (level.foldedCarpetTiles.getTile(x, y) == level.nameToIdMap.get("main_carpet_folded")) {
+		} else if (level.foldedCarpetTiles.getTile(x, y) != 0) {
+			trace("picked folded carpet");
+			pickedObject = level.idToPropertiesMap.get(level.foldedCarpetTiles.getTile(x, y));
 			level.foldedCarpetTiles.setTile(x, y, 0);
-			pickedObject = MAIN_CARPET;
-		} else if (level.foldedCarpetTiles.getTile(x, y) == level.nameToIdMap.get("special_carpet_folded")) {
-			level.foldedCarpetTiles.setTile(x, y, 0);
-			pickedObject = SPECIAL_CARPET;
-		} else if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
-			trace("Picked carpet");
+		} else if (level.carpetTiles.getTile(x, y) != 0) {
+			trace("picked carpet");
+			pickedObject = level.idToPropertiesMap.get(level.carpetTiles.getTile(x, y));
+			trace(pickedObject);
 			level.carpetTiles.setTile(x, y, 0);
-			pickedObject = CARPET;
-		} else if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("main_carpet")) {
-			trace("Main carpet picked");
-			level.carpetTiles.setTile(x, y, 0);
-			pickedObject = MAIN_CARPET;
-		} else if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("special_carpet")) {
-			trace("Special carpet picked");
-			level.carpetTiles.setTile(x, y, 0);
-			pickedObject = SPECIAL_CARPET;
 		}
 		return pickedObject;
 	}
 
-	public function place(x:Int, y:Int, object:PickedObject):Bool {
-		if (object == CARPET || object == SPECIAL_CARPET || object == MAIN_CARPET) {
-			if (level.carpetTiles.getTile(x, y) == 0) {
-				trace("Put carpet");
-				var setTo:Int;
-				if (object == CARPET)
-					setTo = level.nameToIdMap.get("carpet");
-				else if (object == SPECIAL_CARPET)
-					setTo = level.nameToIdMap.get("special_carpet");
-				else
-					setTo = level.nameToIdMap.get("main_carpet");
-				level.carpetTiles.setTile(x, y, setTo);
+	public function place(x:Int, y:Int, object:TiledLevel.PickableProperties):Bool {
+		if (object.isWall) {
+			if (level.wallTiles.getTile(x, y) == 0) {
+				trace("put wall");
+				level.wallTiles.setTile(x, y, object.idOnPickup);
 				return true;
 			}
-		} else if (object == WALL) {
-			if (level.wallTiles.getTile(x, y) == 0) {
-				trace("Put wall");
-				level.wallTiles.setTile(x, y, level.nameToIdMap.get("wall"));
+		} else if (object.isCarpet || object.isFoldedCarpet) {
+			if (level.carpetTiles.getTile(x, y) == 0) {
+				trace("put carpet");
+				level.carpetTiles.setTile(x, y, object.idOnPickup);
 				return true;
 			}
 		}

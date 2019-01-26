@@ -11,7 +11,7 @@ enum Direction {
 class Player extends AnimatedSprite {
 	public var moveDirection:FlxPoint = new FlxPoint(0, 0);
 	public var lastDir:Direction = Direction.Here;
-	public var object:PlayState.PickedObject;
+	public var object:TiledLevel.PickableProperties;
 
 	public function new() {
 		super("assets/images/player.json");
@@ -82,7 +82,7 @@ class Player extends AnimatedSprite {
 		var pos = this.getMidpoint();
 		var x:Int = Math.floor(pos.x / 32);
 		var y:Int = Math.floor(pos.y / 32);
-		if (object == PlayState.PickedObject.WALL) {
+		if (object.isWall) {
 			switch (direction) {
 				case Left:
 					x--;

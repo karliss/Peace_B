@@ -19,6 +19,22 @@ import flixel.addons.tile.FlxTilemapExt;
 import flixel.addons.tile.FlxTileSpecial;
 import haxe.io.Path;
 
+class PickableProperties {
+	public var isCarpet:Bool;
+	public var isFoldedCarpet:Bool;
+	public var isWall:Bool;
+	public var id:Int;
+	public var idOnPickup:Int;
+
+	public function new(isCarpet, isFoldedCarpet, isWall, id) {
+		this.isCarpet = isCarpet;
+		this.isFoldedCarpet = isFoldedCarpet;
+		this.isWall = isWall;
+		this.id = id;
+		this.idOnPickup = id;
+	}
+}
+
 /**
  * @author Samuel Batista
  */
@@ -40,6 +56,8 @@ class TiledLevel extends TiledMap {
 	// Sprites of images layers
 	public var imagesLayer:FlxGroup;
 	public var nameToIdMap:Map<String, Int>;
+	// Pickable objects
+	public var idToPropertiesMap:Map<Int, PickableProperties>;
 
 	public function getLayerTileset(ly:TiledTileLayer):TiledTileSet {
 		for (tile in ly.tileArray) {
@@ -60,6 +78,7 @@ class TiledLevel extends TiledMap {
 		backgroundLayer = new FlxGroup();
 		carpetLayer = new FlxGroup();
 		foldedCarpetLayer = new FlxGroup();
+		idToPropertiesMap = new Map<Int, PickableProperties>();
 
 		FlxG.camera.setScrollBoundsRect(0, 0, fullWidth, fullHeight, true);
 
@@ -70,6 +89,15 @@ class TiledLevel extends TiledMap {
 			for (i in tileset.firstGID...(tileset.firstGID + tileset.numTiles)) {
 				var props:TiledPropertySet = tileset.getPropertiesByGid(i);
 				nameToIdMap.set(tileset.tileTypes[i - tileset.firstGID], i);
+
+				if (props != null) {
+					trace(props);
+					var isCarpet = props.contains("carpet");
+					var isFoldedCarpet = props.contains("folded_carpet");
+					var isWall = props.contains("wall");
+					var pickableProps = new PickableProperties(isCarpet, isFoldedCarpet, isWall, i);
+					idToPropertiesMap.set(i, pickableProps);
+				}
 				/*gidType[i] = MapType.Empty;
 					var props:TiledPropertySet = tileset.getPropertiesByGid(i);
 					if (props == null)
@@ -88,6 +116,12 @@ class TiledLevel extends TiledMap {
 							objectStringMap.set(objectType, tileId2);
 						}
 				}*/
+			}
+			for (prop in idToPropertiesMap) {
+				if (prop.isFoldedCarpet) {
+					var p = tileset.getPropertiesByGid(prop.id);
+					prop.idOnPickup = nameToIdMap[p.get("unfolded_carpet")];
+				}
 			}
 		}
 
