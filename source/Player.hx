@@ -23,9 +23,15 @@ class Player extends AnimatedSprite {
 	var pathList:Array<Vec2I>;
 	var targetCell:Vec2I;
 	var playState:PlayState;
+	var idleAnimations:Array<String> = [];
 
 	public function new(tileset:TiledLevel, playState:PlayState, descr:String = "assets/images/player.json") {
 		super(descr);
+		for (name in this.animationNames) {
+			if (name.indexOf("idle") == 0) {
+				idleAnimations.push(name);
+			}
+		}
 		this.animation.play("idle");
 		maxVelocity.x = 200;
 		maxVelocity.y = 200;
@@ -190,7 +196,13 @@ class Player extends AnimatedSprite {
 		if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1) {
 			animation.play("walk");
 		} else {
-			animation.play("idle");
+			if (animation.finished) {
+				var idleAnimation = "idle";
+				if (idleAnimations.length > 0) {
+					idleAnimation = idleAnimations[Std.random(idleAnimations.length)];
+				}
+				animation.play(idleAnimation);
+			}
 		}
 		this.moveDirection.set(0, 0);
 	}

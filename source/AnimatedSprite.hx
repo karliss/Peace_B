@@ -10,6 +10,8 @@ import haxe.Json;
 
 class AnimatedSprite extends FlxSprite {
 	// var image: FlxSprite;
+	public var animationNames:Array<String> = [];
+
 	public function new(asset:FlxGraphicAsset, width:Int = 32, height:Int = 32) {
 		super(0, 0);
 		if (Std.is(asset, FlxSprite)) {
@@ -42,6 +44,7 @@ class AnimatedSprite extends FlxSprite {
 					var speed:Int = Std.parseInt(d.speed);
 					var looped = d.looped == "true";
 					animation.add(anim, d.f, speed, looped);
+					animationNames.push(anim);
 				}
 			}
 		}
