@@ -10,6 +10,8 @@ import flixel.text.FlxText;
 enum PickedObject {
 	NONE;
 	CARPET;
+	MAIN_CARPET;
+	SPECIAL_CARPET;
 	WALL;
 }
 
@@ -113,17 +115,38 @@ class PlayState extends FlxState {
 					}
 				} else {
 					// Player wants to pick carpet
-					if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
+					if (level.foldedCarpetTiles.getTile(x, y) == level.nameToIdMap.get("main_carpet_folded")) {
+						level.foldedCarpetTiles.setTile(x, y, 0);
+						pickedObject = MAIN_CARPET;
+					} else if (level.foldedCarpetTiles.getTile(x, y) == level.nameToIdMap.get("special_carpet_folded")) {
+						level.foldedCarpetTiles.setTile(x, y, 0);
+						pickedObject = SPECIAL_CARPET;
+					} else if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
 						trace("Picked carpet");
 						level.carpetTiles.setTile(x, y, 0);
 						pickedObject = CARPET;
+					} else if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("main_carpet")) {
+						trace("Main carpet picked");
+						level.carpetTiles.setTile(x, y, 0);
+						pickedObject = MAIN_CARPET;
+					} else if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("special_carpet")) {
+						trace("Special carpet picked");
+						level.carpetTiles.setTile(x, y, 0);
+						pickedObject = SPECIAL_CARPET;
 					}
 				}
 			} else {
-				if (pickedObject == CARPET) {
+				if (pickedObject == CARPET || pickedObject == SPECIAL_CARPET || pickedObject == MAIN_CARPET) {
 					if (level.carpetTiles.getTile(x, y) == 0) {
 						trace("Put carpet");
-						level.carpetTiles.setTile(x, y, level.nameToIdMap.get("carpet"));
+						var setTo:Int;
+						if (pickedObject == CARPET)
+							setTo = level.nameToIdMap.get("carpet");
+						else if (pickedObject == SPECIAL_CARPET)
+							setTo = level.nameToIdMap.get("special_carpet");
+						else
+							setTo = level.nameToIdMap.get("main_carpet");
+						level.carpetTiles.setTile(x, y, setTo);
 						pickedObject = NONE;
 					}
 				} else if (pickedObject == WALL) {
