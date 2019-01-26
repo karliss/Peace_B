@@ -20,7 +20,7 @@ class PlayState extends FlxState {
 	public var score:FlxText;
 	public var status:FlxText;
 	public var coins:FlxGroup;
-	public var player:FlxSprite;
+	public var player:Player;
 	public var floor:FlxObject;
 	public var exit:FlxSprite;
 	public var input:Input = new Input();
@@ -73,23 +73,20 @@ class PlayState extends FlxState {
 	override public function update(elapsed:Float):Void {
 		input.update();
 
-		player.acceleration.x = 0;
-		player.acceleration.y = 0;
-
 		if (input.directionLeft) {
-			player.acceleration.x -= player.maxVelocity.x * 4;
+			player.setMove(Player.Direction.Left);
 		}
 		if (input.directionRight) {
-			player.acceleration.x += player.maxVelocity.x * 4;
+			player.setMove(Player.Direction.Right);
 		}
 		if (input.directionUp) {
-			player.acceleration.y -= player.maxVelocity.y * 4;
+			player.setMove(Player.Direction.Up);
 		}
 		if (input.directionDown) {
-			player.acceleration.y += player.maxVelocity.y * 4;
+			player.setMove(Player.Direction.Down);
 		}
 
-		if (input.pickItem) {
+		if (input.confirmPressed) {
 			var p = player.getMidpoint();
 			var x:Int = Math.floor(p.x / 32);
 			var y:Int = Math.floor(p.y / 32);

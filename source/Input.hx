@@ -20,7 +20,6 @@ class Input {
 		directionLeft = false;
 		directionRight = false;
 		directionDown = false;
-		pickItem = false;
 
 		if (FlxG.keys.anyPressed([UP, W, K])) {
 			directionUp = true;
@@ -39,9 +38,6 @@ class Input {
 		}
 		if (FlxG.keys.anyJustReleased([SPACE, ENTER])) {
 			confirmPressed = true;
-		}
-		if (FlxG.keys.anyPressed([C])) {
-			pickItem = true;
 		}
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;

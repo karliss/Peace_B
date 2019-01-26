@@ -216,16 +216,10 @@ class TiledLevel extends TiledMap {
 
 		switch (o.type.toLowerCase()) {
 			case "player":
-				var player = new AnimatedSprite("assets/images/player.json");
-				player.animation.play("walk");
+				var player = new Player();
 				player.x = x;
 				player.y = y;
 
-				player.maxVelocity.x = 160;
-				player.maxVelocity.y = 160;
-				// player.acceleration.y = 400;
-				player.drag.x = player.maxVelocity.x * 4;
-				player.drag.y = player.maxVelocity.y * 4;
 				FlxG.camera.follow(player);
 				state.player = player;
 				group.add(player);
