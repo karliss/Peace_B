@@ -79,7 +79,6 @@ class PlayState extends FlxState {
 		if (input.directionDown) {
 			player.acceleration.y += player.maxVelocity.y * 4;
 		}
-
 		super.update(elapsed);
 
 		if (Math.abs(player.velocity.x) > 0.1 || Math.abs(player.velocity.y) > 0.1) {
