@@ -259,12 +259,21 @@ class TiledLevel extends TiledMap {
 
 		switch (o.type.toLowerCase()) {
 			case "player":
-				var player = new Player();
+				var player = new Player(this);
+				player.setcontainer(group);
 				player.x = x;
 				player.y = y;
 
 				FlxG.camera.follow(player);
 				state.player = player;
+				group.add(player);
+			case "helper":
+				var player = new Player(this);
+				player.setcontainer(group);
+				player.x = x;
+				player.y = y;
+
+				state.helpers.add(player);
 				group.add(player);
 				/*case "player_start":
 						var player = new FlxSprite(x, y);
