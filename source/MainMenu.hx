@@ -55,7 +55,8 @@ class MainMenu extends FlxState {
 		buttons.addButton(_btnExit);
 		#end
 
-		var t2:FlxText = new FlxText(10, 110, FlxG.width - 20, "Controls: Gamepad may work\nArrows/WASD/HJKL - move\nSPACE,ENTER - pickup,put down block");
+		var t2:FlxText = new FlxText(10, 110, FlxG.width - 20,
+			"Controls: Gamepad may work (preferably turn on before game)\nArrows/WASD/HJKL - move\nSPACE,ENTER - pickup,put down block");
 		add(t2);
 	}
 
