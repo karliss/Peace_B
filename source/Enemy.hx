@@ -16,6 +16,8 @@ class Enemy extends Player {
 	public function walk(level:TiledLevel):Void {
 		if (isFleeting) {
 			if (walkToTarget() == false) {
+				maxVelocity.x = 60;
+				maxVelocity.y = 60;
 				isFleeting = false;
 			}
 			return;
