@@ -83,10 +83,7 @@ class Input {
 			if (gamepad.anyJustReleased([BACK, X])) {
 				backPressed = true;
 			}
-			if (gamepad.pressed.START) {
-				confirmPressed = true;
-			}
-			if (gamepad.pressed.A) {
+			if (gamepad.anyJustPressed([START, A])) {
 				confirmPressed = true;
 			}
 		}
