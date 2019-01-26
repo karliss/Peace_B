@@ -18,6 +18,7 @@ class PlayState extends FlxState {
 	public var exit:FlxSprite;
 	public var input:Input = new Input();
 	public var helpers:FlxTypedGroup<Player> = new FlxTypedGroup<Player>();
+	public var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 
 	static var youDied:Bool = false;
 
@@ -86,6 +87,25 @@ class PlayState extends FlxState {
 		}
 	}
 
+	private function enemyCollisionCallback(a:FlxObject, b:FlxObject):Bool {
+		var found:Bool = false;
+		for (e in enemies) {
+			if (e.overlapsPoint(b.getMidpoint()) && e.isFleeting == false) {
+				e.handleCollision();
+				found = true;
+				break;
+			}
+		}
+
+		if (found == false)
+			return false;
+
+		var id = level.wallTiles.getTileIndexByCoords(a.getMidpoint());
+		level.wallTiles.setTileByIndex(id, 0);
+
+		return false;
+	}
+
 	override public function update(elapsed:Float):Void {
 		input.update();
 
@@ -96,6 +116,10 @@ class PlayState extends FlxState {
 
 		for (helper in helpers) {
 			helper.walkToTarget();
+		}
+
+		for (enemy in enemies) {
+			enemy.addMove(enemy.getNextMove(level));
 		}
 
 		if (FlxG.keys.anyPressed([F])) {
@@ -113,6 +137,14 @@ class PlayState extends FlxState {
 		level.collideWithLevel(player);
 		for (helper in helpers) {
 			level.collideWithLevel(helper);
+		}
+
+		for (enemy in enemies) {
+			level.wallTiles.overlapsWithCallback(enemy, enemyCollisionCallback);
+		}
+
+		for (enemy in enemies) {
+			level.collideWithLevel(enemy);
 		}
 
 		// FlxG.overlap(exit, player, win);

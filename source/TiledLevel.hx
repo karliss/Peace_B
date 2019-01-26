@@ -275,6 +275,14 @@ class TiledLevel extends TiledMap {
 
 				state.helpers.add(player);
 				group.add(player);
+			case "enemy":
+				var enemy = new Enemy(this, state);
+				enemy.setcontainer(group);
+				enemy.x = x;
+				enemy.y = y;
+
+				state.enemies.add(enemy);
+				group.add(enemy);
 				/*case "player_start":
 						var player = new FlxSprite(x, y);
 						player.makeGraphic(32, 32, 0xffaa1111);

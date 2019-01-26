@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="5">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="7">
  <tileset firstgid="1" source="common.tsx"/>
  <layer id="2" name="background" width="100" height="100">
   <data encoding="csv">
@@ -419,7 +419,9 @@
  </layer>
  <objectgroup id="6" name="marker">
   <object id="2" name="player" type="player" x="1818.18" y="1572.73" width="32" height="32"/>
-  <object id="3" name="enemy" x="2151.52" y="1181.82" width="32" height="32"/>
+  <object id="3" name="enemy" type="enemy" x="2151.52" y="1181.82" width="32" height="32"/>
   <object id="4" name="helper" type="helper" x="1905.33" y="1569.33" width="32" height="32"/>
+  <object id="5" name="enemy" type="enemy" x="1896.12" y="1259.76" width="32" height="32"/>
+  <object id="6" name="enemy" type="enemy" x="1799.15" y="1474.91" width="32" height="32"/>
  </objectgroup>
 </map>
