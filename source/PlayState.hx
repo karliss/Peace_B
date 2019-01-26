@@ -106,6 +106,27 @@ class PlayState extends FlxState {
 		return false;
 	}
 
+	private function enemyOnMainCarpetCallback(a:FlxObject, b:FlxObject):Bool {
+		var found:Bool = false;
+		for (e in enemies) {
+			if (e.overlapsPoint(b.getMidpoint()) && e.isFleeting == false) {
+				found = true;
+				break;
+			}
+		}
+
+		if (found == false)
+			return false;
+
+		var id = level.carpetTiles.getTileIndexByCoords(a.getMidpoint());
+		var props:TiledLevel.PickableProperties = level.idToPropertiesMap.get(level.carpetTiles.getTileByIndex(id));
+		if (props.carpetType == "MAIN") {
+			level.carpetTiles.setTileByIndex(id, 0);
+		}
+
+		return false;
+	}
+
 	override public function update(elapsed:Float):Void {
 		input.update();
 
@@ -139,8 +160,14 @@ class PlayState extends FlxState {
 			level.collideWithLevel(helper);
 		}
 
+		// destroy block
 		for (enemy in enemies) {
 			level.wallTiles.overlapsWithCallback(enemy, enemyCollisionCallback);
+		}
+
+		// destroy main carpets
+		for (enemy in enemies) {
+			level.carpetTiles.overlapsWithCallback(enemy, enemyOnMainCarpetCallback);
 		}
 
 		for (enemy in enemies) {

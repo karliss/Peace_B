@@ -12,11 +12,8 @@ class Enemy extends Player {
 			return fleetingDirection;
 		}
 
-		var X:Int;
-		var Y:Int;
-
-		X = -1;
-		Y = -1;
+		var X:Int = -1;
+		var Y:Int = -1;
 
 		var w:Int = level.carpetTiles.widthInTiles;
 		var h:Int = level.carpetTiles.heightInTiles;
