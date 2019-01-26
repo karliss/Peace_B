@@ -143,7 +143,10 @@ class PlayState extends FlxState {
 			return;
 		}
 
+		checkGameOver();
+
 		applyControls(player);
+
 		for (helper in helpers) {
 			// applyControls(helper);
 		}
@@ -242,6 +245,13 @@ class PlayState extends FlxState {
 		if (coins.countLiving() == 0) {
 			status.text = "Find the exit";
 			exit.exists = true;
+		}
+	}
+
+	function checkGameOver() {
+		var mainCarpets = level.carpetTiles.getTileInstances(level.nameToIdMap["main_carpet"]);
+		if (mainCarpets == null || mainCarpets.length == 0) {
+			openSubState(new GameOver());
 		}
 	}
 
