@@ -10,6 +10,7 @@ import flixel.text.FlxText;
 enum PickedObject {
 	NONE;
 	CARPET;
+	WALL;
 }
 
 class PlayState extends FlxState {
@@ -92,10 +93,33 @@ class PlayState extends FlxState {
 			var y:Int = Math.floor(p.y / 32);
 			trace(level.nameToIdMap.get("carpet"));
 			trace(level.carpetTiles.getTile(x, y));
-			if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
-				trace("Picked carpet");
-				level.carpetTiles.setTile(x, y, 0);
-				pickedObject = CARPET;
+
+			if (input.directionDown ||
+				input.directionUp ||
+				input.directionLeft ||
+				input.directionRight) {
+				// Player wants to pick a wall in that direction
+				if (input.directionUp)
+					y--;
+				else if (input.directionDown)
+					y++;
+				else if (input.directionLeft)
+					x--;
+				else
+					x++;
+
+				if (level.wallTiles.getTile(x, y) == level.nameToIdMap.get("wall")) {
+					trace("Picked wall");
+					level.wallTiles.setTile(x, y, 0);
+					pickedObject = WALL;
+				}
+			} else {
+				// Player wants to pick carpet
+				if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
+					trace("Picked carpet");
+					level.carpetTiles.setTile(x, y, 0);
+					pickedObject = CARPET;
+				}
 			}
 		}
 
