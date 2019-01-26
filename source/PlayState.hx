@@ -87,38 +87,53 @@ class PlayState extends FlxState {
 			player.acceleration.y += player.maxVelocity.y * 4;
 		}
 
-		if (input.pickItem && pickedObject == NONE) {
+		if (input.pickItem) {
 			var p = player.getMidpoint();
 			var x:Int = Math.floor(p.x / 32);
 			var y:Int = Math.floor(p.y / 32);
-			trace(level.nameToIdMap.get("carpet"));
-			trace(level.carpetTiles.getTile(x, y));
+			if (pickedObject == NONE) {
+				if (input.directionDown ||
+					input.directionUp ||
+					input.directionLeft ||
+					input.directionRight) {
+					// Player wants to pick a wall in that direction
+					if (input.directionUp)
+						y--;
+					else if (input.directionDown)
+						y++;
+					else if (input.directionLeft)
+						x--;
+					else
+						x++;
 
-			if (input.directionDown ||
-				input.directionUp ||
-				input.directionLeft ||
-				input.directionRight) {
-				// Player wants to pick a wall in that direction
-				if (input.directionUp)
-					y--;
-				else if (input.directionDown)
-					y++;
-				else if (input.directionLeft)
-					x--;
-				else
-					x++;
-
-				if (level.wallTiles.getTile(x, y) == level.nameToIdMap.get("wall")) {
-					trace("Picked wall");
-					level.wallTiles.setTile(x, y, 0);
-					pickedObject = WALL;
+					if (level.wallTiles.getTile(x, y) == level.nameToIdMap.get("wall")) {
+						trace("Picked wall");
+						level.wallTiles.setTile(x, y, 0);
+						pickedObject = WALL;
+					}
+				} else {
+					// Player wants to pick carpet
+					if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
+						trace("Picked carpet");
+						level.carpetTiles.setTile(x, y, 0);
+						pickedObject = CARPET;
+					}
 				}
 			} else {
-				// Player wants to pick carpet
-				if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
-					trace("Picked carpet");
-					level.carpetTiles.setTile(x, y, 0);
-					pickedObject = CARPET;
+				if (pickedObject == CARPET) {
+					if (level.carpetTiles.getTile(x, y) == 0) {
+						trace("Put carpet");
+						level.carpetTiles.setTile(x, y, level.nameToIdMap.get("carpet"));
+						pickedObject = NONE;
+					}
+				} else if (pickedObject == WALL) {
+					// REWORK CHECKING WHERE TO PLACE WALLS
+					y += 2;
+					if (level.wallTiles.getTile(x, y) == 0) {
+						trace("Put wall");
+						level.wallTiles.setTile(x, y, level.nameToIdMap.get("wall"));
+						pickedObject = NONE;
+					}
 				}
 			}
 		}
