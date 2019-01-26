@@ -179,7 +179,7 @@ class Player extends AnimatedSprite {
 		velocity.set(moveDirection.x, moveDirection.y);
 		currentDir = Here;
 		super.update(d);
-		this.velocity.set(0, 0);
+		// this.velocity.set(0, 0);
 		blockSprite.x = x + this.width / 2;
 		blockSprite.y = y - this.height / 2;
 		if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1) {
