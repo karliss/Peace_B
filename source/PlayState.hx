@@ -124,15 +124,20 @@ class PlayState extends FlxState {
 
 	public function place(x:Int, y:Int, object:TiledLevel.PickableProperties):Bool {
 		if (object.isWall) {
-			if (level.wallTiles.getTile(x, y) == 0) {
+			if (level.wallTiles.getTile(x, y) == 0 && level.foldedCarpetTiles.getTile(x, y) == 0) {
 				trace("put wall");
-				level.wallTiles.setTile(x, y, object.idOnPickup);
+				level.wallTiles.setTile(x, y, object.id);
 				return true;
 			}
-		} else if (object.isCarpet || object.isFoldedCarpet) {
+		} else if (object.isCarpet) {
 			if (level.carpetTiles.getTile(x, y) == 0) {
 				trace("put carpet");
-				level.carpetTiles.setTile(x, y, object.idOnPickup);
+				level.carpetTiles.setTile(x, y, object.idUnfolded);
+				return true;
+			}
+			if (level.foldedCarpetTiles.getTile(x, y) == 0) {
+				trace("put folded carpet");
+				level.foldedCarpetTiles.setTile(x, y, object.idFolded);
 				return true;
 			}
 		}
