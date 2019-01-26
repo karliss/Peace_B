@@ -5,6 +5,11 @@ class Helper extends Player {
 	var placementSource:Vec2I;
 	var placmentDir:Player.Direction;
 
+	override public function new(tileset:TiledLevel, playState:PlayState, descr:String = "assets/images/player.json") {
+		super(tileset, playState, descr);
+		this.maxVelocity.set(200, 200);
+	}
+
 	function getObject():TiledLevel.PickableProperties {
 		var result = new TiledLevel.PickableProperties(false, true, playState.level.nameToIdMap["wall"]);
 		return result;
@@ -66,6 +71,8 @@ class Helper extends Player {
 			if (placementTarget != null) {
 				if (setTarget(placementSource)) {
 					walkToTarget();
+				} else {
+					choosePlacementTarget(this.object);
 				}
 			}
 			if (middleCell().equal(placementSource)) {

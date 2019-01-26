@@ -7,7 +7,7 @@ class Enemy extends Player {
 
 	private var fleetingDirection:Player.Direction;
 
-	override public function new(tileset:TiledLevel, playState:PlayState, descr:String = "assets/images/player.json") {
+	override public function new(tileset:TiledLevel, playState:PlayState, descr:String = "assets/images/enemy.json") {
 		super(tileset, playState, descr);
 		maxVelocity.x = 60;
 		maxVelocity.y = 60;

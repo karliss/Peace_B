@@ -151,19 +151,8 @@ class PlayState extends FlxState {
 			// applyControls(helper);
 		}
 
-		for (helper in helpers) {
-			helper.walkToTarget();
-		}
-
 		for (enemy in enemies) {
 			enemy.walk(level);
-		}
-
-		if (FlxG.keys.anyPressed([F])) {
-			for (helper in helpers) {
-				var path = helper.setTarget(new Vec2I(Std.int(player.x / 32), Std.int(player.y / 32)));
-				trace("finding path", path);
-			}
 		}
 
 		super.update(elapsed);
@@ -190,8 +179,6 @@ class PlayState extends FlxState {
 		for (enemy in enemies) {
 			level.collideWithLevel(enemy);
 		}
-
-		// FlxG.overlap(exit, player, win);
 	}
 
 	public function pickup(x:Int, y:Int):TiledLevel.PickableProperties {
@@ -231,12 +218,6 @@ class PlayState extends FlxState {
 			}
 		}
 		return false;
-	}
-
-	public function win(Exit:FlxObject, Player:FlxObject):Void {
-		status.text = "Yay, you won!";
-		score.text = "SCORE: 5000";
-		player.kill();
 	}
 
 	public function getCoin(Coin:FlxObject, Player:FlxObject):Void {

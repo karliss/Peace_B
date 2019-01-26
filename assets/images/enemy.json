@@ -1,0 +1,18 @@
+{
+    "image" : "assets/images/enemy.png",
+    "width" : 30,
+    "height": 30,
+    "collision": [4, 4, 18, 24],
+    "animation" : {
+        "walk" : {
+            "speed" : 20,
+            "looped" : "true",
+            "f" : [0, 1, 2, 3, 4, 5]
+        },
+        "idle" : {
+            "speed" : 2,
+            "looped" : "true",
+            "f" : [0, 21]
+        }
+    }
+}

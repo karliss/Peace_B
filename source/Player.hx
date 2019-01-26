@@ -27,8 +27,8 @@ class Player extends AnimatedSprite {
 	public function new(tileset:TiledLevel, playState:PlayState, descr:String = "assets/images/player.json") {
 		super(descr);
 		this.animation.play("idle");
-		maxVelocity.x = 160;
-		maxVelocity.y = 160;
+		maxVelocity.x = 200;
+		maxVelocity.y = 200;
 		drag.x = maxVelocity.x * 4;
 		drag.y = maxVelocity.y * 4;
 		this.tileset = tileset;

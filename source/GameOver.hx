@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 
 class GameOver extends FlxSubState {
 	private var buttons:ButtonMenu;
@@ -18,6 +19,7 @@ class GameOver extends FlxSubState {
 	}
 
 	public override function create() {
+		super.create();
 		FlxG.mouse.visible = true;
 		buttons = new ButtonMenu();
 		add(buttons);
@@ -29,10 +31,14 @@ class GameOver extends FlxSubState {
 		btnExit.x = FlxG.width / 2 - btnExit.width / 2;
 		ButtonMenu.scaleButton(btnExit);
 
-		var t2:FlxText = new FlxText(10, 110, FlxG.width - 20, "Game Over", 20);
+		var t2:FlxText = new FlxText(FlxG.width / 2, FlxG.height / 2, 200, "Game Over", 20);
+		t2.scrollFactor.set(0, 0);
+		t2.x -= t2.width / 2;
+		t2.color = FlxColor.fromRGB(0, 0, 0);
 		add(t2);
-		t2.x = FlxG.width / 2 - t2.width;
-		t2.y = FlxG.height / 2 - t2.height;
+		// t2.x = FlxG.width / 2 - t2.width / 2;
+		// t2.y = FlxG.height / 2 - t2.height / 2;
+		trace(t2.x, t2.y);
 	}
 
 	public override function update(elapsed:Float) {
