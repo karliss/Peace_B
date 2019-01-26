@@ -94,6 +94,17 @@ class PlayState extends FlxState {
 			// applyControls(helper);
 		}
 
+		for (helper in helpers) {
+			helper.walkToTarget();
+		}
+
+		if (FlxG.keys.anyPressed([F])) {
+			for (helper in helpers) {
+				var path = helper.setTarget(new Vec2I(Std.int(player.x / 32), Std.int(player.y / 32)));
+				trace("finding path", path);
+			}
+		}
+
 		super.update(elapsed);
 
 		FlxG.overlap(coins, player, getCoin);

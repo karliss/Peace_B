@@ -250,7 +250,7 @@ class TiledLevel extends TiledMap {
 
 		switch (o.type.toLowerCase()) {
 			case "player":
-				var player = new Player(this);
+				var player = new Player(this, state);
 				player.setcontainer(group);
 				player.x = x;
 				player.y = y;
@@ -259,7 +259,7 @@ class TiledLevel extends TiledMap {
 				state.player = player;
 				group.add(player);
 			case "helper":
-				var player = new Player(this);
+				var player = new Player(this, state);
 				player.setcontainer(group);
 				player.x = x;
 				player.y = y;
