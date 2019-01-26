@@ -32,9 +32,10 @@ class TiledLevel extends TiledMap {
 	public var carpetLayer:FlxGroup;
 	public var foldedCarpetLayer:FlxGroup;
 	public var backgroundLayer:FlxGroup;
-
-	var collidableTileLayers:Array<FlxTilemap>;
-
+	// tilemaps
+	public var wallTiles:FlxTilemap;
+	public var carpetTiles:FlxTilemap;
+	public var foldedCarpetTiles:FlxTilemap;
 	// Sprites of images layers
 	public var imagesLayer:FlxGroup;
 
@@ -125,14 +126,13 @@ class TiledLevel extends TiledMap {
 				backgroundLayer.add(tilemap);
 			} else if (tileLayer.name == "carpet") {
 				carpetLayer.add(tilemap);
+				carpetTiles = tilemap;
 			} else if (tileLayer.name == "folded_carpet") {
 				foldedCarpetLayer.add(tilemap);
+				foldedCarpetTiles = tilemap;
 			} else if (tileLayer.name == "wall") {
-				if (collidableTileLayers == null)
-					collidableTileLayers = new Array<FlxTilemap>();
-
 				wallLayer.add(tilemap);
-				collidableTileLayers.push(tilemap);
+				wallTiles = tilemap;
 			}
 		}
 	}
@@ -267,15 +267,10 @@ class TiledLevel extends TiledMap {
 	}
 
 	public function collideWithLevel(obj:FlxObject, ?notifyCallback:FlxObject->FlxObject->Void, ?processCallback:FlxObject->FlxObject->Bool):Bool {
-		if (collidableTileLayers == null)
-			return false;
-
-		for (map in collidableTileLayers) {
-			// IMPORTANT: Always collide the map with objects, not the other way around.
-			//            This prevents odd collision errors (collision separation code off by 1 px).
-			if (FlxG.overlap(map, obj, notifyCallback, processCallback != null ? processCallback : FlxObject.separate)) {
-				return true;
-			}
+		// IMPORTANT: Always collide the map with objects, not the other way around.
+		//            This prevents odd collision errors (collision separation code off by 1 px).
+		if (FlxG.overlap(wallTiles, obj, notifyCallback, processCallback != null ? processCallback : FlxObject.separate)) {
+			return true;
 		}
 		return false;
 	}
