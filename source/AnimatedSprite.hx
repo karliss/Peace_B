@@ -26,7 +26,6 @@ class AnimatedSprite extends FlxSprite {
 				var jsondata = Json.parse(openfl.Assets.getText(path));
 				var width = Std.parseInt(jsondata.width);
 				var height = Std.parseInt(jsondata.height);
-				trace(jsondata.image, width, height);
 				loadGraphic(jsondata.image, true, width, height);
 				// centerOffsets();
 				var bodyDesc = Reflect.field(jsondata, "collision");

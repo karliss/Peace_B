@@ -16,8 +16,9 @@ class PlayState extends FlxState {
 	public var player:Player;
 	public var floor:FlxObject;
 	public var exit:FlxSprite;
+	public var resources:Vec2I;
 	public var input:Input = new Input();
-	public var helpers:FlxTypedGroup<Player> = new FlxTypedGroup<Player>();
+	public var helpers:FlxTypedGroup<Helper> = new FlxTypedGroup<Helper>();
 	public var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 
 	static var youDied:Bool = false;
@@ -178,41 +179,37 @@ class PlayState extends FlxState {
 	}
 
 	public function pickup(x:Int, y:Int):TiledLevel.PickableProperties {
-		trace("doing pickup");
 		var p = player.getMidpoint();
 		var pickedObject:TiledLevel.PickableProperties = null;
 		if (level.wallTiles.getTile(x, y) != 0) {
-			trace("picked wall");
 			pickedObject = level.idToPropertiesMap.get(level.wallTiles.getTile(x, y));
 			level.wallTiles.setTile(x, y, 0);
 		} else if (level.foldedCarpetTiles.getTile(x, y) != 0) {
-			trace("picked folded carpet");
 			pickedObject = level.idToPropertiesMap.get(level.foldedCarpetTiles.getTile(x, y));
 			level.foldedCarpetTiles.setTile(x, y, 0);
 		} else if (level.carpetTiles.getTile(x, y) != 0) {
-			trace("picked carpet");
 			pickedObject = level.idToPropertiesMap.get(level.carpetTiles.getTile(x, y));
-			trace(pickedObject);
 			level.carpetTiles.setTile(x, y, 0);
 		}
 		return pickedObject;
 	}
 
+	public function canPutObject(x:Int, y:Int):Bool {
+		return level.foldedCarpetTiles.getTile(x, y) == 0 && level.wallTiles.getTile(x, y) == 0;
+	}
+
 	public function place(x:Int, y:Int, object:TiledLevel.PickableProperties):Bool {
 		if (object.isWall) {
 			if (level.wallTiles.getTile(x, y) == 0 && level.foldedCarpetTiles.getTile(x, y) == 0) {
-				trace("put wall");
 				level.wallTiles.setTile(x, y, object.id);
 				return true;
 			}
 		} else if (object.isCarpet) {
 			if (level.carpetTiles.getTile(x, y) == 0) {
-				trace("put carpet");
 				level.carpetTiles.setTile(x, y, object.idUnfolded);
 				return true;
 			}
-			if (level.foldedCarpetTiles.getTile(x, y) == 0) {
-				trace("put folded carpet");
+			if (canPutObject(x, y)) {
 				level.foldedCarpetTiles.setTile(x, y, object.idFolded);
 				return true;
 			}

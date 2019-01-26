@@ -47,6 +47,10 @@ class Player extends AnimatedSprite {
 
 	static var DV:Array<Vec2I> = [new Vec2I(1, 0), new Vec2I(-1, 0), new Vec2I(0, -1), new Vec2I(0, 1)];
 
+	public function middleCell():Vec2I {
+		return new Vec2I(Std.int((x + this.width / 2) / 32), Std.int((y + this.height / 2) / 32));
+	}
+
 	public function calculatePath():Bool {
 		pathList = new Array<Vec2I>();
 		var walls = playState.level.wallTiles;
@@ -87,6 +91,7 @@ class Player extends AnimatedSprite {
 		}
 		var targetId = targetCell.asInt();
 		if (!prev.exists(targetId)) {
+			targetCell = null;
 			return false;
 		}
 		var p = targetCell;
@@ -148,7 +153,6 @@ class Player extends AnimatedSprite {
 	function updateCarriedBlock() {
 		if (object != null) {
 			var gid = object.idUnfolded;
-			trace(object);
 			var frame = gid - tileset.getGidOwner(gid).firstGID;
 			blockSprite.animation.frameIndex = frame;
 			blockSprite.revive();
@@ -194,6 +198,11 @@ class Player extends AnimatedSprite {
 		pickup(currentDir, state);
 	}
 
+	public function setObject(object:TiledLevel.PickableProperties) {
+		this.object = object;
+		updateCarriedBlock();
+	}
+
 	public function pickup(direction:Direction, state:PlayState) {
 		if (object != null) {
 			return;
@@ -212,8 +221,7 @@ class Player extends AnimatedSprite {
 				y++;
 			case Here:
 		}
-		this.object = state.pickup(x, y);
-		updateCarriedBlock();
+		setObject(state.pickup(x, y));
 	}
 
 	public function placePlayer(state:PlayState) {

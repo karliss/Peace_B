@@ -95,7 +95,6 @@ class TiledLevel extends TiledMap {
 				var props:TiledPropertySet = tileset.getPropertiesByGid(i);
 
 				if (props != null) {
-					trace(props);
 					var isCarpet = props.contains("folded_carpet");
 					var isWall = props.contains("wall");
 					var pickableProps = new PickableProperties(isCarpet, isWall, i);
@@ -111,7 +110,6 @@ class TiledLevel extends TiledMap {
 						}
 					}
 
-					trace(pickableProps);
 
 					idToPropertiesMap.set(i, pickableProps);
 				}
@@ -270,13 +268,15 @@ class TiledLevel extends TiledMap {
 				state.player = player;
 				group.add(player);
 			case "helper":
-				var player = new Player(this, state);
-				player.setcontainer(group);
-				player.x = x;
-				player.y = y;
+				var helper = new Helper(this, state);
+				helper.setcontainer(group);
+				helper.x = x;
+				helper.y = y;
 
-				state.helpers.add(player);
-				group.add(player);
+				state.helpers.add(helper);
+				group.add(helper);
+			case "resources":
+				state.resources = new Vec2I(Std.int(x / 32), Std.int(y / 32));
 			case "enemy":
 				var enemy = new Enemy(this, state);
 				enemy.setcontainer(group);
@@ -284,35 +284,7 @@ class TiledLevel extends TiledMap {
 				enemy.y = y;
 
 				state.enemies.add(enemy);
-				group.add(enemy);
-				/*case "player_start":
-						var player = new FlxSprite(x, y);
-						player.makeGraphic(32, 32, 0xffaa1111);
-						player.maxVelocity.x = 160;
-						player.maxVelocity.y = 160;
-						// player.acceleration.y = 400;
-						player.drag.x = player.maxVelocity.x * 4;
-						player.drag.y = player.maxVelocity.y * 4;
-						FlxG.camera.follow(player);
-						state.player = player;
-						group.add(player);
-
-					case "floor":
-						var floor = new FlxObject(x, y, o.width, o.height);
-						state.floor = floor;
-
-					case "coin":
-						var tileset = g.map.getGidOwner(o.gid);
-						var coin = new FlxSprite(x, y, c_PATH_LEVEL_TILESHEETS + tileset.imageSource);
-						state.coins.add(coin);
-
-					case "exit":
-						// Create the level exit
-						var exit = new FlxSprite(x, y);
-						exit.makeGraphic(32, 32, 0xff3f3f3f);
-						exit.exists = false;
-						state.exit = exit;
-						group.add(exit); */
+				group.add(enemy);		
 		}
 	}
 
