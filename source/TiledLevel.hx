@@ -25,6 +25,7 @@ class PickableProperties {
 	public var id:Int; // when isWall
 	public var idFolded:Int; // when isCarpet
 	public var idUnfolded:Int; // when isCarpet
+	public var carpetType:String;
 
 	public function new(isCarpet, isWall, id) {
 		this.isCarpet = isCarpet;
@@ -100,6 +101,7 @@ class TiledLevel extends TiledMap {
 					var pickableProps = new PickableProperties(isCarpet, isWall, i);
 
 					if (isCarpet) {
+						pickableProps.carpetType = props.get("carpet_type");
 						if (props.contains("carpet")) {
 							// adjust folded id
 							pickableProps.idFolded = nameToIdMap[props.get("folded_carpet")];

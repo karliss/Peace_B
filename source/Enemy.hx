@@ -23,7 +23,11 @@ class Enemy extends Player {
 		for (x in 0...w) {
 			for (y in 0...h) {
 				if (level.carpetTiles.getTile(x, y) > 0) {
-					Y = y * 32 + 16;
+					var prop:TiledLevel.PickableProperties = level.idToPropertiesMap.get(level.carpetTiles.getTile(x, y));
+					if (prop.carpetType == "MAIN") {
+						X = x * 32 + 16;
+						Y = y * 32 + 16;
+					}
 				}
 			}
 		}
