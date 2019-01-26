@@ -7,6 +7,11 @@ import flixel.FlxState;
 import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 
+enum PickedObject {
+	NONE;
+	CARPET;
+}
+
 class PlayState extends FlxState {
 	public var level:TiledLevel;
 	public var score:FlxText;
@@ -17,6 +22,7 @@ class PlayState extends FlxState {
 	public var exit:FlxSprite;
 	public var input:Input = new Input();
 
+	static var pickedObject:PickedObject = NONE;
 	static var youDied:Bool = false;
 
 	override public function create():Void {
@@ -78,6 +84,19 @@ class PlayState extends FlxState {
 		}
 		if (input.directionDown) {
 			player.acceleration.y += player.maxVelocity.y * 4;
+		}
+
+		if (input.pickItem && pickedObject == NONE) {
+			var p = player.getMidpoint();
+			var x:Int = Math.floor(p.x / 32);
+			var y:Int = Math.floor(p.y / 32);
+			trace(level.nameToIdMap.get("carpet"));
+			trace(level.carpetTiles.getTile(x, y));
+			if (level.carpetTiles.getTile(x, y) == level.nameToIdMap.get("carpet")) {
+				trace("Picked carpet");
+				level.carpetTiles.setTile(x, y, 0);
+				pickedObject = CARPET;
+			}
 		}
 
 		super.update(elapsed);

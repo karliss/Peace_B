@@ -36,4 +36,6 @@
    <property name="ground_layer" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="13" type="main_carpet_folded"/>
+ <tile id="14" type="special_carpet_folded"/>
 </tileset>

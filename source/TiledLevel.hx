@@ -12,6 +12,7 @@ import flixel.addons.editors.tiled.TiledObjectLayer;
 import flixel.addons.editors.tiled.TiledTileLayer;
 import flixel.addons.editors.tiled.TiledTileSet;
 import flixel.addons.editors.tiled.TiledTilePropertySet;
+import flixel.addons.editors.tiled.TiledPropertySet;
 import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
 import flixel.addons.tile.FlxTilemapExt;
@@ -38,6 +39,7 @@ class TiledLevel extends TiledMap {
 	public var foldedCarpetTiles:FlxTilemap;
 	// Sprites of images layers
 	public var imagesLayer:FlxGroup;
+	public var nameToIdMap:Map<String, Int>;
 
 	public function getLayerTileset(ly:TiledTileLayer):TiledTileSet {
 		for (tile in ly.tileArray) {
@@ -51,6 +53,7 @@ class TiledLevel extends TiledMap {
 	public function new(tiledLevel:FlxTiledMapAsset, state:PlayState) {
 		super(tiledLevel);
 
+		nameToIdMap = new Map<String, Int>();
 		imagesLayer = new FlxGroup();
 		wallLayer = new FlxGroup();
 		objectsLayer = new FlxGroup();
@@ -65,6 +68,8 @@ class TiledLevel extends TiledMap {
 
 		for (tileset in tilesets) {
 			for (i in tileset.firstGID...(tileset.firstGID + tileset.numTiles)) {
+				var props:TiledPropertySet = tileset.getPropertiesByGid(i);
+				nameToIdMap.set(tileset.tileTypes[i - tileset.firstGID], i);
 				/*gidType[i] = MapType.Empty;
 					var props:TiledPropertySet = tileset.getPropertiesByGid(i);
 					if (props == null)
