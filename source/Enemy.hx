@@ -7,6 +7,12 @@ class Enemy extends Player {
 
 	private var fleetingDirection:Player.Direction;
 
+	override public function new(tileset:TiledLevel, playState:PlayState, descr:String = "assets/images/player.json") {
+		super(tileset, playState, descr);
+		maxVelocity.x = 60;
+		maxVelocity.y = 60;
+	}
+
 	public function getNextMove(level:TiledLevel):Player.Direction {
 		if (isFleeting) {
 			return fleetingDirection;
@@ -58,6 +64,9 @@ class Enemy extends Player {
 			case 3:
 				fleetingDirection = Player.Direction.Up;
 		}
+
+		maxVelocity.x = 200;
+		maxVelocity.y = 200;
 
 		isFleeting = true;
 	}
