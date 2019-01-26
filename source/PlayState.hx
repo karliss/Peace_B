@@ -20,6 +20,7 @@ class PlayState extends FlxState {
 	public var input:Input = new Input();
 	public var helpers:FlxTypedGroup<Helper> = new FlxTypedGroup<Helper>();
 	public var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
+	public var paused:Bool = false;
 
 	static var youDied:Bool = false;
 
@@ -135,6 +136,12 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float):Void {
 		input.update();
+		if (input.backPressed) {
+			fpause();
+		}
+		if (paused) {
+			return;
+		}
 
 		applyControls(player);
 		for (helper in helpers) {
@@ -236,5 +243,21 @@ class PlayState extends FlxState {
 			status.text = "Find the exit";
 			exit.exists = true;
 		}
+	}
+
+	override function onFocusLost() {
+		fpause();
+	}
+
+	public function fpause() {
+		if (this.subState == null) {
+			// FlxNapeSpace.paused = true;
+			openSubState(new EscMenu(this));
+			paused = true;
+		}
+	}
+
+	public function unpause() {
+		paused = false;
 	}
 }
