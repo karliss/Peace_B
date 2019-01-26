@@ -1,4 +1,6 @@
+import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
+import flixel.FlxSprite;
 
 enum Direction {
 	Left;
@@ -14,13 +16,38 @@ class Player extends AnimatedSprite {
 	public var currentDir:Direction = Direction.Here;
 	public var object:TiledLevel.PickableProperties;
 
-	public function new() {
+	var container:FlxGroup;
+	var blockSprite:FlxSprite;
+	var tileset:TiledLevel;
+
+	public function new(tileset:TiledLevel) {
 		super("assets/images/player.json");
 		this.animation.play("idle");
 		maxVelocity.x = 160;
 		maxVelocity.y = 160;
 		drag.x = maxVelocity.x * 4;
 		drag.y = maxVelocity.y * 4;
+		this.tileset = tileset;
+		blockSprite = new FlxSprite();
+		blockSprite.loadGraphic("assets/images/tileset.png", true, 32, 32);
+		blockSprite.kill();
+	}
+
+	public function setcontainer(container:FlxGroup) {
+		this.container = container;
+		container.add(blockSprite);
+	}
+
+	function updateCarriedBlock() {
+		if (object != null) {
+			var gid = object.idOnPickup;
+			trace(object);
+			var frame = gid - tileset.getGidOwner(gid).firstGID;
+			blockSprite.animation.frameIndex = frame;
+			blockSprite.revive();
+		} else {
+			blockSprite.kill();
+		}
 	}
 
 	public function addMove(d:Direction) {
@@ -45,6 +72,13 @@ class Player extends AnimatedSprite {
 		acceleration.set(moveDirection.x, moveDirection.y);
 		currentDir = Here;
 		super.update(d);
+		blockSprite.x = x + this.width / 2;
+		blockSprite.y = y - this.height / 2;
+		if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1) {
+			animation.play("walk");
+		} else {
+			animation.play("idle");
+		}
 		this.moveDirection.set(0, 0);
 	}
 
@@ -71,6 +105,7 @@ class Player extends AnimatedSprite {
 			case Here:
 		}
 		this.object = state.pickup(x, y);
+		updateCarriedBlock();
 	}
 
 	public function placePlayer(state:PlayState) {
@@ -100,6 +135,7 @@ class Player extends AnimatedSprite {
 		}
 		if (state.place(x, y, object)) {
 			this.object = null;
+			updateCarriedBlock();
 		}
 	}
 }

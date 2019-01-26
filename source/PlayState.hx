@@ -17,6 +17,7 @@ class PlayState extends FlxState {
 	public var floor:FlxObject;
 	public var exit:FlxSprite;
 	public var input:Input = new Input();
+	public var helpers:FlxTypedGroup<Player> = new FlxTypedGroup<Player>();
 
 	static var youDied:Bool = false;
 
@@ -62,9 +63,7 @@ class PlayState extends FlxState {
 		add(status);
 	}
 
-	override public function update(elapsed:Float):Void {
-		input.update();
-
+	function applyControls(player:Player) {
 		if (input.directionLeft) {
 			player.addMove(Player.Direction.Left);
 		}
@@ -85,18 +84,25 @@ class PlayState extends FlxState {
 				player.placePlayer(this);
 			}
 		}
+	}
+
+	override public function update(elapsed:Float):Void {
+		input.update();
+
+		applyControls(player);
+		for (helper in helpers) {
+			// applyControls(helper);
+		}
 
 		super.update(elapsed);
 
-		if (Math.abs(player.velocity.x) > 0.1 || Math.abs(player.velocity.y) > 0.1) {
-			player.animation.play("walk");
-		} else {
-			player.animation.play("idle");
-		}
 		FlxG.overlap(coins, player, getCoin);
 
 		// Collide with foreground tile layer
 		level.collideWithLevel(player);
+		for (helper in helpers) {
+			level.collideWithLevel(helper);
+		}
 
 		// FlxG.overlap(exit, player, win);
 	}
