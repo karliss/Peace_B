@@ -92,7 +92,7 @@ class PlayState extends FlxState {
 		var found:Bool = false;
 		for (e in enemies) {
 			if (e.overlapsPoint(b.getMidpoint()) && e.isFleeting == false) {
-				e.handleCollision();
+				e.handleCollision(level);
 				found = true;
 				break;
 			}
@@ -146,7 +146,7 @@ class PlayState extends FlxState {
 		}
 
 		for (enemy in enemies) {
-			enemy.addMove(enemy.getNextMove(level));
+			enemy.walk(level);
 		}
 
 		if (FlxG.keys.anyPressed([F])) {

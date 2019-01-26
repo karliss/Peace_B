@@ -13,9 +13,12 @@ class Enemy extends Player {
 		maxVelocity.y = 60;
 	}
 
-	public function getNextMove(level:TiledLevel):Player.Direction {
+	public function walk(level:TiledLevel):Void {
 		if (isFleeting) {
-			return fleetingDirection;
+			if (walkToTarget() == false) {
+				isFleeting = false;
+			}
+			return;
 		}
 
 		var X:Int = -1;
@@ -35,35 +38,30 @@ class Enemy extends Player {
 			}
 		}
 
-		if (X == -1)
-			return Player.Direction.Down;
+		if (X == -1) {
+			addMove(Player.Direction.Down);
+			return;
+		}
 
 		if (Math.abs(x - X) > 10) {
 			if (x < X)
-				return Player.Direction.Right;
-			if (x > X)
-				return Player.Direction.Left;
+				addMove(Player.Direction.Right);
+			else
+				addMove(Player.Direction.Left);
 		}
-		if (y < Y)
-			return Player.Direction.Down;
-		return Player.Direction.Up;
+		if (Math.abs(y - Y) > 10) {
+			if (y < Y)
+				addMove(Player.Direction.Down);
+			else
+				addMove(Player.Direction.Up);
+		}
 	}
 
-	public function handleCollision():Void {
+	public function handleCollision(level:TiledLevel):Void {
 		if (isFleeting)
 			return;
-		trace(this);
 
-		switch (Std.random(4)) {
-			case 0:
-				fleetingDirection = Player.Direction.Left;
-			case 1:
-				fleetingDirection = Player.Direction.Right;
-			case 2:
-				fleetingDirection = Player.Direction.Down;
-			case 3:
-				fleetingDirection = Player.Direction.Up;
-		}
+		setTarget(new Vec2I(Std.random(2) == 0 ? 0 : level.wallTiles.widthInTiles - 1, Std.random(2) == 0 ? 0 : level.wallTiles.heightInTiles - 1), true);
 
 		maxVelocity.x = 200;
 		maxVelocity.y = 200;
