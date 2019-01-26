@@ -1,0 +1,44 @@
+package;
+
+import flixel.FlxG;
+import flixel.FlxSprite;
+import openfl.Assets;
+import openfl.display.BitmapData;
+import flixel.system.FlxAssets;
+import haxe.Json;
+
+class AnimatedSprite extends FlxSprite {
+	// var image: FlxSprite;
+	public function new(asset:FlxGraphicAsset, width:Int = 32, height:Int = 32) {
+		super(0, 0);
+		if (Std.is(asset, FlxSprite)) {
+			var reference:FlxSprite = cast asset;
+			loadGraphicFromSprite(reference);
+		} else if (Std.is(asset, BitmapData)) {
+			var reference:BitmapData = cast asset;
+			loadGraphic(reference, false, width, height);
+		} else {
+			var path:String = cast asset;
+			if (!StringTools.endsWith(path, ".json")) {
+				loadGraphic(path, false, width, height);
+			} else {
+				var jsondata = Json.parse(openfl.Assets.getText(path));
+				var width = Std.parseInt(jsondata.width);
+				var height = Std.parseInt(jsondata.height);
+				trace(jsondata.image, width, height);
+				loadGraphic(jsondata.image, true, width, height);
+				// centerOffsets();
+
+				for (anim in Reflect.fields(jsondata.animation)) {
+					var d = Reflect.field(jsondata.animation, anim);
+					var speed:Int = Std.parseInt(d.speed);
+					var looped = d.looped == "true";
+					animation.add(anim, d.f, speed, looped);
+				}
+			}
+		}
+		// body.allowRotation = false;
+		// setDrag(0.98, 0.98);
+		// body.userData.sprite = this;
+	}
+}

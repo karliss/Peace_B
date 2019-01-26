@@ -1,0 +1,18 @@
+{
+    "image" : "assets/images/player.png",
+    "width" : 30,
+    "height": 30,
+    "collision": [2, 2, 28, 28],
+    "animation" : {
+        "walk" : {
+            "speed" : 20,
+            "looped" : "true",
+            "f" : [0, 1, 2, 3, 4, 5]
+        },
+        "idle" : {
+            "speed" : 10,
+            "looped" : "true",
+            "f" : [0]
+        }
+    }
+}

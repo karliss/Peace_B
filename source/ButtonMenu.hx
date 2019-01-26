@@ -58,8 +58,11 @@ class ButtonMenu extends FlxTypedGroup<FlxSprite> {
 					buttons[selected].onUp.fire();
 					pressed = true;
 				}
-				if (pressed) {
+				if (!selector.alive) {
 					selector.revive();
+					pressed = true;
+				}
+				if (pressed) {
 					selector.y = buttons[selected].y;
 					selector.x = buttons[selected].x - 64;
 				}

@@ -95,8 +95,6 @@ class TiledLevel extends TiledMap {
 
 			// if (tileSet == null)
 			//	throw "Tileset '" + tileSheetName + " not found. Did you misspell the 'tilesheet' property in " + tileLayer.name + "' layer?";
-			trace(tileSet);
-			trace(tileSet.imageSource);
 			var imagePath = new Path(tileSet.imageSource);
 			var processedPath = Path.join([c_PATH_LEVEL_TILESHEETS, tileSet.imageSource]);
 			// var processedPath = new Path(c_PATH_LEVEL_TILESHEETS) +
@@ -213,8 +211,11 @@ class TiledLevel extends TiledMap {
 
 		switch (o.type.toLowerCase()) {
 			case "player":
-				var player = new FlxSprite(x, y);
-				player.makeGraphic(32, 32, 0xffaa1111);
+				var player = new AnimatedSprite("assets/images/player.json");
+				player.animation.play("walk");
+				player.x = x;
+				player.y = y;
+
 				player.maxVelocity.x = 160;
 				player.maxVelocity.y = 160;
 				// player.acceleration.y = 400;

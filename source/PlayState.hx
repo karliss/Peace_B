@@ -66,6 +66,7 @@ class PlayState extends FlxState {
 
 		player.acceleration.x = 0;
 		player.acceleration.y = 0;
+
 		if (input.directionLeft) {
 			player.acceleration.x -= player.maxVelocity.x * 4;
 		}
@@ -81,6 +82,11 @@ class PlayState extends FlxState {
 
 		super.update(elapsed);
 
+		if (Math.abs(player.velocity.x) > 0.1 || Math.abs(player.velocity.y) > 0.1) {
+			player.animation.play("walk");
+		} else {
+			player.animation.play("idle");
+		}
 		FlxG.overlap(coins, player, getCoin);
 
 		// Collide with foreground tile layer
