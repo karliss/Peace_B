@@ -76,8 +76,9 @@ class Helper extends Player {
 			if (placementTarget == null) {
 				choosePlacementTarget(this.object);
 			}
-			if (placementTarget != null && (playState.level.wallTiles.getTile(placementTarget.x, placementTarget.y) > 0 || playState.level.foldedCarpetTiles
-				.getTile(placementTarget.x, placementTarget.y) > 0)) {
+			if (placementTarget != null && (playState.level.wallTiles.getTile(placementTarget.x, placementTarget
+					.y) > 0 || playState.level.foldedCarpetTiles.getTile(placementTarget.x, placementTarget.y) > 0 || playState.level.carpetTiles.getTile(placementTarget
+					.x, placementTarget.y) != playState.level.nameToIdMap.get("special_carpet"))) {
 				choosePlacementTarget(this.object);
 			}
 			if (placementTarget != null) {
