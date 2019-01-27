@@ -54,7 +54,7 @@ class PlayState extends FlxState {
 		score.scrollFactor.set(0, 0);
 		score.borderColor = 0xff000000;
 		score.borderStyle = SHADOW;
-		score.text = "SCORE: " + (coins.countDead() * 100);
+		score.text = "Carpets remaining: ";
 		add(score);
 
 		status = new FlxText(FlxG.width - 160 - 2, 2, 160);
@@ -62,7 +62,7 @@ class PlayState extends FlxState {
 		status.borderColor = 0xff000000;
 		score.borderStyle = SHADOW;
 		status.alignment = RIGHT;
-		status.text = youDied ? "Aww, you died!" : "Collect coins.";
+		status.text = "Protect blue carpets";
 		add(status);
 	}
 

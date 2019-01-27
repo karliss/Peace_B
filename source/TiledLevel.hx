@@ -110,7 +110,6 @@ class TiledLevel extends TiledMap {
 						}
 					}
 
-
 					idToPropertiesMap.set(i, pickableProps);
 				}
 				/*gidType[i] = MapType.Empty;
@@ -284,7 +283,7 @@ class TiledLevel extends TiledMap {
 				enemy.y = y;
 
 				state.enemies.add(enemy);
-				group.add(enemy);		
+				group.add(enemy);
 		}
 	}
 

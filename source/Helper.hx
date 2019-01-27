@@ -11,7 +11,20 @@ class Helper extends Player {
 	}
 
 	function getObject():TiledLevel.PickableProperties {
-		var result = new TiledLevel.PickableProperties(false, true, playState.level.nameToIdMap["wall"]);
+		var r = Std.random(1024);
+		var block = "wall";
+		if (r < 50) {
+			block = "main_carpet";
+		} else if (r < 130) {
+			block = "special_carpet";
+		} else if (r < 300) {
+			block = "carpet";
+		}
+		var result = playState.level.idToPropertiesMap[playState.level.nameToIdMap[block]];
+		/*if (r < 100) {
+			result = new TiledLevel.PickableProperties(true, false, playState.level.nameToIdMap["special_carpet"]);
+			result.carpetType = "special_carpet";
+		}*/
 		return result;
 	}
 
@@ -29,20 +42,19 @@ class Helper extends Player {
 			var pos = new Vec2I(x, y);
 			var dir = Player.Direction.Here;
 			var putInPlace = !object.isWall;
-			if (!putInPlace) {
-				var dirs:Array<Direction> = if (putInPlace) {
-					[Direction.Here];
-				} else {
-					[Direction.Left, Direction.Up, Direction.Down, Direction.Right];
-				};
-				for (d in dirs) {
-					var tp = pos.addDir(d);
-					if (walls.getTile(tp.x, tp.y) == 0 && setTarget(tp, true)) {
-						placementTarget = pos;
-						placementSource = tp;
-						placmentDir = Vec2I.opositeDir(d);
-						break;
-					}
+
+			var dirs:Array<Direction> = if (putInPlace) {
+				[Direction.Here];
+			} else {
+				[Direction.Left, Direction.Up, Direction.Down, Direction.Right];
+			};
+			for (d in dirs) {
+				var tp = pos.addDir(d);
+				if (walls.getTile(tp.x, tp.y) == 0 && setTarget(tp, true)) {
+					placementTarget = pos;
+					placementSource = tp;
+					placmentDir = Vec2I.opositeDir(d);
+					break;
 				}
 			}
 			if (placementTarget != null) {

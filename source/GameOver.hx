@@ -38,7 +38,6 @@ class GameOver extends FlxSubState {
 		add(t2);
 		// t2.x = FlxG.width / 2 - t2.width / 2;
 		// t2.y = FlxG.height / 2 - t2.height / 2;
-		trace(t2.x, t2.y);
 	}
 
 	public override function update(elapsed:Float) {
