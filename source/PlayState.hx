@@ -21,8 +21,14 @@ class PlayState extends FlxState {
 	public var helpers:FlxTypedGroup<Helper> = new FlxTypedGroup<Helper>();
 	public var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 	public var paused:Bool = false;
+	public var levelFile:String;
 
 	static var youDied:Bool = false;
+
+	function new(levelFile:String) {
+		super();
+		this.levelFile = levelFile;
+	}
 
 	override public function create():Void {
 		FlxG.mouse.visible = false;
@@ -31,7 +37,7 @@ class PlayState extends FlxState {
 
 		// Load the level's tilemaps
 		coins = new FlxGroup();
-		level = new TiledLevel("assets/tiled/test_map.tmx", this);
+		level = new TiledLevel(levelFile, this);
 
 		// Add backgrounds
 		add(level.backgroundLayer);

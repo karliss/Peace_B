@@ -34,7 +34,7 @@ class EscMenu extends FlxSubState {
 		ButtonMenu.scaleButton(btnContinue);
 
 		btnRestart = new FlxButton(0, 160, "Restart", function() {
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new PlayState(game.levelFile));
 		});
 		buttons.addButton(btnRestart);
 		btnRestart.x = FlxG.width / 2 - btnRestart.width / 2;
