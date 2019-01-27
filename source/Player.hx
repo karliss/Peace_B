@@ -196,7 +196,7 @@ class Player extends AnimatedSprite {
 		if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1) {
 			animation.play("walk");
 		} else {
-			if (animation.finished) {
+			if ("walk" == animation.curAnim.name || animation.finished) {
 				var idleAnimation = "idle";
 				if (idleAnimations.length > 0) {
 					idleAnimation = idleAnimations[Std.random(idleAnimations.length)];

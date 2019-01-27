@@ -157,8 +157,6 @@ class PlayState extends FlxState {
 
 		super.update(elapsed);
 
-		FlxG.overlap(coins, player, getCoin);
-
 		// Collide with foreground tile layer
 		level.collideWithLevel(player);
 		for (helper in helpers) {
@@ -220,17 +218,13 @@ class PlayState extends FlxState {
 		return false;
 	}
 
-	public function getCoin(Coin:FlxObject, Player:FlxObject):Void {
-		Coin.kill();
-		score.text = "SCORE: " + (coins.countDead() * 100);
-		if (coins.countLiving() == 0) {
-			status.text = "Find the exit";
-			exit.exists = true;
-		}
-	}
-
 	function checkGameOver() {
+		var count = 0;
 		var mainCarpets = level.carpetTiles.getTileInstances(level.nameToIdMap["main_carpet"]);
+		if (mainCarpets != null) {
+			count = mainCarpets.length;
+		}
+		score.text = "Blue carpets remaining: " + count;
 		if (mainCarpets == null || mainCarpets.length == 0) {
 			openSubState(new GameOver());
 		}
