@@ -31,14 +31,21 @@ class MainMenu extends FlxState {
 		add(buttons);
 
 		var b1:FlxButton = new FlxButton(FlxG.width / 2, FlxG.height / 2, "Start", function() {
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new PlayState("assets/tiled/small.tmx"));
 		});
 		b1.x -= b1.width / 2;
 		buttons.addButton(b1);
 		ButtonMenu.scaleButton(b1);
 
+		var b2:FlxButton = new FlxButton(FlxG.width / 2, FlxG.height / 2 + 30, "Start big", function() {
+			FlxG.switchState(new PlayState("assets/tiled/test_map.tmx"));
+		});
+		b2.x -= b2.width / 2;
+		buttons.addButton(b2);
+		ButtonMenu.scaleButton(b2);
+
 		#if desktop
-		_btnFullScreen = new FlxButton(FlxG.width / 2, FlxG.height / 2 + 30, FlxG.fullscreen ? "FULLSCREEN" : "WINDOWED", function() {
+		_btnFullScreen = new FlxButton(FlxG.width / 2, FlxG.height / 2 + 60, FlxG.fullscreen ? "FULLSCREEN" : "WINDOWED", function() {
 			FlxG.fullscreen = !FlxG.fullscreen;
 			_btnFullScreen.text = FlxG.fullscreen ? "FULLSCREEN" : "WINDOWED";
 		});
@@ -47,7 +54,7 @@ class MainMenu extends FlxState {
 		ButtonMenu.scaleButton(_btnFullScreen);
 		buttons.addButton(_btnFullScreen);
 
-		var _btnExit = new FlxButton(FlxG.width / 2, FlxG.height / 2 + 70, "Exit", function() {
+		var _btnExit = new FlxButton(FlxG.width / 2, FlxG.height / 2 + 90, "Exit", function() {
 			System.exit(0);
 		});
 		_btnExit.x -= _btnExit.width / 2;
