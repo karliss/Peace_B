@@ -21,11 +21,13 @@ class PlayState extends FlxState {
 	public var helpers:FlxTypedGroup<Helper> = new FlxTypedGroup<Helper>();
 	public var enemies:FlxTypedGroup<Enemy> = new FlxTypedGroup<Enemy>();
 	public var paused:Bool = false;
+	public var survivalTime:Float = 0;
 
 	static var youDied:Bool = false;
 
 	override public function create():Void {
 		FlxG.mouse.visible = false;
+		FlxG.fixedTimestep = false;
 
 		bgColor = 0xffaaaaaa;
 
@@ -143,6 +145,9 @@ class PlayState extends FlxState {
 			return;
 		}
 
+		survivalTime += elapsed;
+		status.text = "Protect blue carpets! Time: " + Std.int(survivalTime);
+
 		checkGameOver();
 
 		applyControls(player);
@@ -226,7 +231,7 @@ class PlayState extends FlxState {
 		}
 		score.text = "Blue carpets remaining: " + count;
 		if (mainCarpets == null || mainCarpets.length == 0) {
-			openSubState(new GameOver());
+			openSubState(new GameOver(Std.int(survivalTime)));
 		}
 	}
 
